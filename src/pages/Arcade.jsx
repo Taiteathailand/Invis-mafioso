@@ -16,7 +16,7 @@ const EXTERNAL_GAMES = [
     id: 'slope',
     name: 'Slope',
     icon: '🔴',
-    desc: 'Roll down an endless neon track at crazy speeds.',
+    desc: 'Roll down an endless neon track.',
     category: 'Racing',
     url: 'https://slopegame.com/',
   },
@@ -40,9 +40,17 @@ const EXTERNAL_GAMES = [
     id: 'pacman',
     name: 'PAC-MAN',
     icon: '🟡',
-    desc: 'The classic maze game. Eat dots and avoid ghosts.',
+    desc: 'The classic maze game.',
     category: 'Classic',
     url: 'https://www.pacman.com/en/',
+  },
+  {
+    id: 'geometry-dash-lite',
+    name: 'Geometry Dash Lite',
+    icon: '🟨',
+    desc: 'Jump, dodge obstacles and beat the levels.',
+    category: 'Platformer',
+    url: 'https://geometrylitepc.net/',
   },
 ]
 
@@ -73,6 +81,7 @@ const GAME_CATEGORIES = {
 export default function Arcade() {
   const [search, setSearch] = useState('')
   const [category, setCategory] = useState('All Games')
+
   const [favorites, setFavorites] = useState(() => {
     try {
       return JSON.parse(localStorage.getItem('arcade-favorites') || '[]')
@@ -158,14 +167,11 @@ export default function Arcade() {
           <div key={g.id} className="card link">
             <div className="row" style={{ justifyContent: 'space-between' }}>
               <div className="big">{g.icon}</div>
+
               <button
                 className="btn sm"
                 onClick={() => toggleFavorite(g.id)}
-                aria-label={
-                  favorites.includes(g.id)
-                    ? 'Remove favorite'
-                    : 'Add favorite'
-                }
+                aria-label="Toggle favorite"
               >
                 {favorites.includes(g.id) ? '⭐' : '☆'}
               </button>
@@ -178,14 +184,9 @@ export default function Arcade() {
               <span className="badge">{g.category}</span>
 
               {g.external ? (
-                <a
-                  className="btn gold"
-                  href={g.url}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
-                  Play ↗
-                </a>
+                <Link className="btn gold" to={`/game/${g.id}`}>
+                  Play
+                </Link>
               ) : (
                 <Link className="btn gold" to={`/arcade/${g.id}`}>
                   Play
