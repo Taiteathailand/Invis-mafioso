@@ -8,9 +8,8 @@ const EXTERNAL_GAMES = [
     id: 'snow-rider-3d',
     name: 'Snow Rider 3D',
     icon: '🛷',
-    desc: 'Race down a snowy mountain and dodge obstacles.',
+    desc: 'Race down a snowy mountain.',
     category: 'Racing',
-    url: 'https://snowrider.com/',
   },
   {
     id: 'slope',
@@ -18,39 +17,34 @@ const EXTERNAL_GAMES = [
     icon: '🔴',
     desc: 'Roll down an endless neon track.',
     category: 'Racing',
-    url: 'https://slopegame.com/',
   },
   {
     id: 'run-3',
     name: 'Run 3',
     icon: '🏃',
-    desc: 'Run through space tunnels and avoid falling.',
+    desc: 'Run through space tunnels.',
     category: 'Platformer',
-    url: 'https://www.coolmathgames.com/0-run-3',
   },
   {
     id: 'happy-wheels',
     name: 'Happy Wheels',
     icon: '🚴',
-    desc: 'Navigate ridiculous obstacle courses.',
+    desc: 'Navigate obstacle courses.',
     category: 'Action',
-    url: 'https://totaljerkface.com/happy_wheels.t6',
   },
   {
     id: 'pacman',
     name: 'PAC-MAN',
     icon: '🟡',
-    desc: 'The classic maze game.',
+    desc: 'Play the classic maze game.',
     category: 'Classic',
-    url: 'https://www.pacman.com/en/',
   },
   {
     id: 'geometry-dash-lite',
     name: 'Geometry Dash Lite',
     icon: '🟨',
-    desc: 'Jump, dodge obstacles and beat the levels.',
+    desc: 'Jump, dodge obstacles and beat levels.',
     category: 'Platformer',
-    url: 'https://geometrylitepc.net/',
   },
 ]
 
@@ -75,7 +69,6 @@ const GAME_CATEGORIES = {
   connect4: 'Classic',
   memory: 'Puzzle',
   flappy: 'Platformer',
-  cubedash: 'Platformer',
 }
 
 export default function Arcade() {
@@ -102,11 +95,13 @@ export default function Arcade() {
   }
 
   const games = useMemo(() => {
-    const builtIn = GAMES.map((g) => ({
-      ...g,
-      category: GAME_CATEGORIES[g.id] || 'Classic',
-      external: false,
-    }))
+    const builtIn = GAMES
+      .filter((g) => g.id !== 'cubedash')
+      .map((g) => ({
+        ...g,
+        category: GAME_CATEGORIES[g.id] || 'Classic',
+        external: false,
+      }))
 
     const external = EXTERNAL_GAMES.map((g) => ({
       ...g,
@@ -136,7 +131,7 @@ export default function Arcade() {
       <div className="page-head">
         <h1>🕹️ INVIS MAFIOSO ARCADE</h1>
         <p className="mut">
-          Your collection of classics, browser games and more.
+          Your collection of browser games and classics.
         </p>
       </div>
 
@@ -167,11 +162,9 @@ export default function Arcade() {
           <div key={g.id} className="card link">
             <div className="row" style={{ justifyContent: 'space-between' }}>
               <div className="big">{g.icon}</div>
-
               <button
                 className="btn sm"
                 onClick={() => toggleFavorite(g.id)}
-                aria-label="Toggle favorite"
               >
                 {favorites.includes(g.id) ? '⭐' : '☆'}
               </button>
@@ -182,16 +175,12 @@ export default function Arcade() {
 
             <div className="row" style={{ justifyContent: 'space-between' }}>
               <span className="badge">{g.category}</span>
-
-              {g.external ? (
-                <Link className="btn gold" to={`/game/${g.id}`}>
-                  Play
-                </Link>
-              ) : (
-                <Link className="btn gold" to={`/arcade/${g.id}`}>
-                  Play
-                </Link>
-              )}
+              <Link
+                className="btn gold"
+                to={g.external ? `/game/${g.id}` : `/arcade/${g.id}`}
+              >
+                Play
+              </Link>
             </div>
           </div>
         ))}
@@ -200,9 +189,7 @@ export default function Arcade() {
       {games.length === 0 && (
         <div className="card">
           <h3>No games found</h3>
-          <p className="mut">
-            Try another search or category.
-          </p>
+          <p className="mut">Try another search or category.</p>
         </div>
       )}
     </div>
