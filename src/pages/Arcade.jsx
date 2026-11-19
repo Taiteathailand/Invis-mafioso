@@ -12,6 +12,38 @@ const EXTERNAL_GAMES = [
     category: 'Racing',
     url: 'https://snowrider.com/',
   },
+  {
+    id: 'slope',
+    name: 'Slope',
+    icon: '🔴',
+    desc: 'Roll down an endless neon track at crazy speeds.',
+    category: 'Racing',
+    url: 'https://slopegame.com/',
+  },
+  {
+    id: 'run-3',
+    name: 'Run 3',
+    icon: '🏃',
+    desc: 'Run through space tunnels and avoid falling.',
+    category: 'Platformer',
+    url: 'https://www.coolmathgames.com/0-run-3',
+  },
+  {
+    id: 'happy-wheels',
+    name: 'Happy Wheels',
+    icon: '🚴',
+    desc: 'Navigate ridiculous obstacle courses.',
+    category: 'Action',
+    url: 'https://totaljerkface.com/happy_wheels.t6',
+  },
+  {
+    id: 'pacman',
+    name: 'PAC-MAN',
+    icon: '🟡',
+    desc: 'The classic maze game. Eat dots and avoid ghosts.',
+    category: 'Classic',
+    url: 'https://www.pacman.com/en/',
+  },
 ]
 
 const CATEGORIES = [
@@ -20,6 +52,7 @@ const CATEGORIES = [
   'Puzzle',
   'Classic',
   'Platformer',
+  'Action',
   'Favorites',
 ]
 
@@ -72,9 +105,12 @@ export default function Arcade() {
     }))
 
     return [...builtIn, ...external].filter((g) => {
+      const term = search.toLowerCase()
+
       const matchesSearch =
-        g.name.toLowerCase().includes(search.toLowerCase()) ||
-        g.desc.toLowerCase().includes(search.toLowerCase())
+        g.name.toLowerCase().includes(term) ||
+        g.desc.toLowerCase().includes(term) ||
+        g.category.toLowerCase().includes(term)
 
       const matchesCategory =
         category === 'All Games' ||
@@ -125,7 +161,11 @@ export default function Arcade() {
               <button
                 className="btn sm"
                 onClick={() => toggleFavorite(g.id)}
-                aria-label="Toggle favorite"
+                aria-label={
+                  favorites.includes(g.id)
+                    ? 'Remove favorite'
+                    : 'Add favorite'
+                }
               >
                 {favorites.includes(g.id) ? '⭐' : '☆'}
               </button>
@@ -133,8 +173,10 @@ export default function Arcade() {
 
             <h3>{g.name}</h3>
             <p className="mut">{g.desc}</p>
+
             <div className="row" style={{ justifyContent: 'space-between' }}>
               <span className="badge">{g.category}</span>
+
               {g.external ? (
                 <a
                   className="btn gold"
@@ -157,10 +199,11 @@ export default function Arcade() {
       {games.length === 0 && (
         <div className="card">
           <h3>No games found</h3>
-          <p className="mut">Try another search or category.</p>
+          <p className="mut">
+            Try another search or category.
+          </p>
         </div>
       )}
     </div>
   )
 }
-
